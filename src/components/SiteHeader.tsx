@@ -54,7 +54,10 @@ export default function SiteHeader() {
           <Link href="/pricing" className="nav-chip">
             Pricing
           </Link>
-          <Link href="/contact" className="btn btn-primary btn-sm">
+          <Link
+            href="/contact"
+            className={`btn btn-sm ${overHero ? "btn-accent" : "btn-primary"}`}
+          >
             Reserve a sprint
           </Link>
         </nav>
