@@ -7,7 +7,7 @@ export default function Contact() {
 
   if (submitted) {
     return (
-      <div className="max-w-xl mx-auto px-6 py-20">
+      <div className="inner-page max-w-xl mx-auto px-6 py-20">
         <h1 className="text-3xl font-medium mb-4">Received.</h1>
         <p className="text-[#3f3f3f]">
           We’ll reply within one business day with next steps or a short
@@ -18,7 +18,7 @@ export default function Contact() {
   }
 
   return (
-    <div className="max-w-xl mx-auto px-6 py-20">
+    <div className="inner-page max-w-xl mx-auto px-6 py-20">
       <h1 className="text-4xl font-medium tracking-tight mb-4">Reserve a sprint</h1>
       <p className="text-[#3f3f3f] mb-10">
         Tell us a bit about the company and product. We’ll confirm fit and

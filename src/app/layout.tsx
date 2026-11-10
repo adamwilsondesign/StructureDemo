@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
-import { Geist } from "next/font/google";
+import { Archivo } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+import SiteHeader from "@/components/SiteHeader";
+import ScarcityPill from "@/components/ScarcityPill";
 
-const geist = Geist({
-  variable: "--font-geist-sans",
+const archivo = Archivo({
+  variable: "--font-archivo",
   subsets: ["latin"],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -20,37 +22,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${geist.variable} h-full`}>
-      <body className="min-h-full flex flex-col bg-[#fafaf9] text-[#0f0f0f]">
-        <header className="border-b border-[#e5e5e4]">
-          <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">
-            <Link href="/" className="text-lg font-medium tracking-tight">
-              Structure
-            </Link>
-            <nav className="flex items-center gap-8 text-sm">
-              <Link href="/process" className="hover:opacity-70">
-                Process
-              </Link>
-              <Link href="/pricing" className="hover:opacity-70">
-                Pricing
-              </Link>
-              <Link href="/about" className="hover:opacity-70">
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="bg-[#0f0f0f] text-white px-4 py-2 rounded-full text-sm hover:opacity-90"
-              >
-                Reserve a sprint
-              </Link>
-            </nav>
-          </div>
-        </header>
-        <main className="flex-1">{children}</main>
-        <footer className="border-t border-[#e5e5e4] mt-24">
-          <div className="max-w-5xl mx-auto px-6 py-10 text-sm text-[#6b6b6b] flex justify-between">
+    <html lang="en" className={`${archivo.variable} h-full`}>
+      <body className="min-h-full flex flex-col">
+        <SiteHeader />
+        <main>{children}</main>
+        <ScarcityPill />
+        <footer className="site-footer">
+          <div className="site-footer-inner">
             <span>Structure.studio</span>
-            <span>© {new Date().getFullYear()}</span>
+            <span>© 2026</span>
           </div>
         </footer>
       </body>
