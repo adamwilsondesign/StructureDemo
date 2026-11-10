@@ -2,96 +2,40 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
-import Magnetic from "./Magnetic";
 
 /**
- * Elevated original hero — cool/blue still + caustic drift + stepped outcomes.
- * Keeps architecture / offer math / current headline; craft + motion first.
+ * Reconstructed from live HTML + chunk-page.js module 21448
+ * (+ hero-slideshow.reconstructed.js constants).
  */
+
+const SLIDES = [
+  "/images/slide1.jpg",
+  "/images/slide2.jpg",
+  "/images/slide3.jpg",
+];
 
 const BARS = [
   { label: "ENGINEERS SHIP", width: "22%" },
   { label: "SALES STAY ON BRAND", width: "42%" },
   { label: "YOU OWN THE SYSTEM", width: "64%" },
-] as const;
+];
 
+const SLIDE_MS = 5000;
 const BAR_STAGGER_S = 0.14;
-const BARS_IO_THRESHOLD = 0.55;
+const BARS_IO_THRESHOLD = 0.85;
 
-function HeroMedia() {
-  const mediaRef = useRef<HTMLDivElement>(null);
-  const [still, setStill] = useState<"a" | "b">("a");
-
-  useEffect(() => {
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (reduced) return;
-
-    // Optional sibling crossfade later in the session
-    const swap = setTimeout(() => setStill("b"), 14000);
-    return () => clearTimeout(swap);
-  }, []);
-
-  useEffect(() => {
-    const el = mediaRef.current;
-    if (!el) return;
-    const reduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    if (reduced) return;
-
-    let raf = 0;
-    const onMove = (e: PointerEvent) => {
-      if (raf) return;
-      raf = requestAnimationFrame(() => {
-        raf = 0;
-        const rect = el.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
-        const y = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
-        el.style.setProperty("--px", x.toFixed(3));
-        el.style.setProperty("--py", y.toFixed(3));
-      });
-    };
-
-    window.addEventListener("pointermove", onMove, { passive: true });
-    return () => {
-      window.removeEventListener("pointermove", onMove);
-      if (raf) cancelAnimationFrame(raf);
-    };
-  }, []);
-
-  return (
-    <div ref={mediaRef} className="hero-media absolute inset-0 overflow-hidden">
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/hero-still-a.jpg"
-        alt=""
-        className={`hero-still ${still === "a" ? "is-active" : ""}`}
-        width={2400}
-        height={1350}
-        fetchPriority="high"
-      />
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/hero-still-b.jpg"
-        alt=""
-        className={`hero-still ${still === "b" ? "is-active" : ""}`}
-        width={2400}
-        height={1350}
-      />
-      <div className="hero-caustic" aria-hidden />
-      <div className="hero-grain" aria-hidden />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#050a14]/55 via-transparent to-[#050a14]/35" />
-      <div className="absolute inset-0 bg-gradient-to-r from-[#050a14]/72 via-[#050a14]/28 to-transparent" />
-    </div>
-  );
-}
-
-function OutcomeBars() {
-  const barsRef = useRef<HTMLDivElement>(null);
+function HeroSlideshow() {
+  const [index, setIndex] = useState(0);
   const [playing, setPlaying] = useState(false);
-  const [active, setActive] = useState(0);
+  const barsRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const id = setInterval(
+      () => setIndex((i) => (i + 1) % SLIDES.length),
+      SLIDE_MS,
+    );
+    return () => clearInterval(id);
+  }, []);
 
   useEffect(() => {
     const el = barsRef.current;
@@ -106,42 +50,41 @@ function OutcomeBars() {
     return () => io.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!playing) return;
-    const id = setInterval(() => {
-      setActive((i) => (i + 1) % BARS.length);
-    }, 2800);
-    return () => clearInterval(id);
-  }, [playing]);
-
   return (
-    <div
-      ref={barsRef}
-      className={`hero-bars ${playing ? "is-playing" : ""}`}
-      role="list"
-      aria-label="Outcomes"
-    >
-      {BARS.map((bar, i) => (
-        <div
-          key={bar.label}
-          className={`hero-bar-clip ${active === i ? "is-active" : ""}`}
-          style={{ width: bar.width }}
-          role="listitem"
-        >
-          <button
-            type="button"
-            className="hero-bar"
-            style={{ animationDelay: `${BAR_STAGGER_S * i}s` }}
-            onClick={() => setActive(i)}
-            aria-pressed={active === i}
-          >
-            <span className="hero-bar-label">
-              <span aria-hidden>→</span>
-              <span>{bar.label}</span>
-            </span>
-          </button>
-        </div>
+    <div className="absolute inset-0 overflow-hidden">
+      {SLIDES.map((src, i) => (
+        <img
+          key={src}
+          src={src}
+          alt=""
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
+        />
       ))}
+      <div className="absolute inset-0 bg-gradient-to-b from-[#0a1020]/35 via-transparent to-transparent" />
+      <div
+        ref={barsRef}
+        className={`hero-bars ${playing ? "is-playing" : ""}`}
+      >
+        {BARS.map((bar, i) => (
+          <div
+            key={bar.label}
+            className="hero-bar-clip"
+            style={{ width: bar.width }}
+          >
+            <div
+              className="hero-bar"
+              style={{ animationDelay: `${BAR_STAGGER_S * i}s` }}
+            >
+              <span className="hero-bar-label">
+                <span>→</span>
+                <span>{bar.label}</span>
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -150,9 +93,9 @@ export default function Hero() {
   return (
     <section
       data-hero="true"
-      className="hero relative h-[100svh] min-h-[640px] text-[#f3f3f3]"
+      className="relative h-[100svh] min-h-[640px] text-[#f3f3f3]"
     >
-      <HeroMedia />
+      <HeroSlideshow />
       <div className="hero-blueprint" />
       <div className="relative z-10 h-full max-w-[1200px] mx-auto px-6 flex flex-col justify-end pb-[220px]">
         <div className="grid grid-cols-12">
@@ -180,21 +123,16 @@ export default function Hero() {
               className="rise-in mt-10 flex flex-wrap items-center gap-3"
               style={{ animationDelay: "400ms" }}
             >
-              <Magnetic>
-                <Link className="btn-primary" href="/contact">
-                  Reserve a sprint
-                </Link>
-              </Magnetic>
-              <Magnetic strength={8}>
-                <Link className="btn-on-photo" href="/pricing">
-                  See pricing
-                </Link>
-              </Magnetic>
+              <Link className="btn-primary" href="/contact">
+                Reserve a sprint
+              </Link>
+              <Link className="btn-on-photo" href="/pricing">
+                See pricing
+              </Link>
             </div>
           </div>
         </div>
       </div>
-      <OutcomeBars />
     </section>
   );
 }

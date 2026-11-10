@@ -48,12 +48,10 @@ export default function NavChrome() {
         if (y < 24) root.dataset.nav = "shown";
         else if (dy > 8) root.dataset.nav = "hidden";
         else if (dy < -8) root.dataset.nav = "shown";
-        root.dataset.scrolled = y > 12 ? "1" : "0";
         lastY = y;
         ticking = false;
       });
     };
-    root.dataset.scrolled = window.scrollY > 12 ? "1" : "0";
 
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
