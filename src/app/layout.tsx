@@ -6,8 +6,6 @@ import NavChrome from "@/components/NavChrome";
 import ScrollWash from "@/components/ScrollWash";
 import BpGrid from "@/components/BpGrid";
 import Footer from "@/components/Footer";
-import Preloader from "@/components/Preloader";
-import ScarcityPill from "@/components/ScarcityPill";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -29,13 +27,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} h-full`}>
       <body className="min-h-full flex flex-col">
-        <Preloader />
         <ScrollWash />
         <BpGrid />
         <SiteHeader />
         <NavChrome />
         <main className="flex-1">{children}</main>
-        <ScarcityPill />
         <Footer />
       </body>
     </html>

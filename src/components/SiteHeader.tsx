@@ -76,6 +76,15 @@ export default function SiteHeader() {
         </Link>
 
         <div className="ml-auto flex items-center gap-2 md:gap-3">
+          <Link
+            href="/contact"
+            className="slot-pill"
+            onClick={() => setOpen(false)}
+          >
+            <span className="slot-count">1</span>
+            <span>slot left in January</span>
+          </Link>
+
           <nav className="hidden md:flex items-center gap-1 text-[12px]">
             <Link className="nav-chip" href="/process">
               Process
