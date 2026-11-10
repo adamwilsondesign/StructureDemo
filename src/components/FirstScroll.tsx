@@ -1,62 +1,28 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import Reveal from "./Reveal";
 
-const OUTCOMES = [
-  "Engineers ship",
-  "Sales stay on brand",
-  "You own the system",
-] as const;
-
-/** Editorial first scroll + quiet outcomes line; reveal once on seam. */
+/**
+ * First content band after hero — exact copy/classes from live HTML.
+ */
 export default function FirstScroll() {
-  const sectionRef = useRef<HTMLElement>(null);
-
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          el.classList.add("is-in");
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.22 },
-    );
-
-    observer.observe(el);
-    return () => observer.disconnect();
-  }, []);
-
   return (
-    <section
-      ref={sectionRef}
-      className="first-scroll reveal"
-      aria-label="What the system does"
-    >
-      <div className="first-scroll-grid">
-        <h2 className="first-scroll-headline font-display">
-          Your brand and product, turned into a system your team can actually
-          use.
-        </h2>
-        <div className="first-scroll-body">
-          <p>
-            Engineers ship with tokens, Code Connect, and specs already decided.
-            Sales and marketing generate on-brand material without a queue. We
-            leave. You keep the files.
-          </p>
-          <p className="outcomes-line" aria-label="Outcomes">
-            {OUTCOMES.map((label, i) => (
-              <span key={label} className="outcome">
-                {i > 0 ? <span className="outcome-sep" aria-hidden="true" /> : null}
-                {label}
-              </span>
-            ))}
-            <span className="outcomes-rule" aria-hidden="true" />
-          </p>
-        </div>
+    <section className="px-6 pt-28 md:pt-40 pb-20 md:pb-28">
+      <div className="max-w-[1200px] mx-auto grid md:grid-cols-12 gap-x-10 gap-y-8">
+        <Reveal className="md:col-span-6" delay={0}>
+          <h2 className="text-[34px] md:text-[48px] leading-[0.96]">
+            Your brand and product, turned into a system your team can actually
+            use.
+          </h2>
+        </Reveal>
+        <Reveal
+          className="md:col-span-5 md:col-start-8 text-muted text-[17px] leading-[1.6] md:pt-2"
+          delay={120}
+        >
+          Engineers ship with tokens, Code Connect, and specs already decided.
+          Sales and marketing generate on-brand material without a queue. We
+          leave. You keep the files.
+        </Reveal>
       </div>
     </section>
   );

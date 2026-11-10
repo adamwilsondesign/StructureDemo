@@ -2,7 +2,10 @@ import type { Metadata } from "next";
 import { Archivo } from "next/font/google";
 import "./globals.css";
 import SiteHeader from "@/components/SiteHeader";
-import ScarcityPill from "@/components/ScarcityPill";
+import NavChrome from "@/components/NavChrome";
+import ScrollWash from "@/components/ScrollWash";
+import BpGrid from "@/components/BpGrid";
+import Footer from "@/components/Footer";
 
 const archivo = Archivo({
   variable: "--font-archivo",
@@ -24,15 +27,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${archivo.variable} h-full`}>
       <body className="min-h-full flex flex-col">
+        <ScrollWash />
+        <BpGrid />
         <SiteHeader />
-        <main>{children}</main>
-        <ScarcityPill />
-        <footer className="site-footer">
-          <div className="site-footer-inner">
-            <span>Structure.studio</span>
-            <span>© 2026</span>
-          </div>
-        </footer>
+        <NavChrome />
+        <main className="flex-1">{children}</main>
+        <Footer />
       </body>
     </html>
   );
